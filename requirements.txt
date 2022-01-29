@@ -20,6 +20,7 @@ cryptography==3.4.8
 cs50==7.0.2
 cycler==0.10.0
 debugpy==1.2.1
+discord==1.7.3
 distlib==0.3.2
 docopt==0.6.2
 filelock==3.0.12
@@ -80,7 +81,6 @@ pyquil==1.9.0
 python-dateutil==2.8.2
 python-jsonrpc-server==0.3.2
 python-language-server==0.31.10
-pyxel @ git+https://github.com/amasad/pyxel@8bcc2266b2fbb65f72ad686952de3838971c136e
 referenceqvm==0.3
 regex==2021.8.28
 replit==3.2.4
