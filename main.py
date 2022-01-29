@@ -9,7 +9,6 @@ my_secret = my_secret = os.environ['TOKEN']
 channel_id_general = 743673283878322230
 client = discord.Client()
 users_time = {}
-count = 1
 
 
 def AZTimeNow():
