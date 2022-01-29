@@ -113,5 +113,5 @@ async def on_message(msg):
     if msg.content.startswith('!wally'):
         await msg.channel.send('Is a bitch')
 
-keep_alive.keep_alive()
+# keep_alive.keep_alive()
 client.run(my_secret)
