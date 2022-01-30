@@ -7,7 +7,10 @@ import pytz
 # global cruft
 my_secret = my_secret = os.environ.get('TOKEN')
 channel_id_general = 743673283878322230
-client = discord.Client()
+channel_id_voice = 743673622664708217
+intents = discord.Intents().default()
+intents.members = True
+client = discord.Client(intents=intents)
 users_time = {}
 
 
@@ -19,8 +22,8 @@ def IsSpam(author):
     retval = False
     now = AZTimeNow()
     if author in users_time:
-        # 5 min debounce
-        if (now - users_time[author]).total_seconds() / 60 < 5:
+        # 55 min debounce
+        if (now - users_time[author]).total_seconds() / 60 < 55:
             retval = True
 
     users_time[author] = now
@@ -30,8 +33,12 @@ def IsSpam(author):
 async def MondayNightCheck():
 	now = AZTimeNow()
 	if now.weekday() == 0 and now.hour == 12 + 8 and now.minute < 2:
-		channel = client.get_channel(channel_id_general)
-		await channel.send("@everyone IT'S MONDAY NIGHT!!!")
+		general = client.get_channel(channel_id_general)
+		str = "@everyone IT'S MONDAY NIGHT!!!\n"
+		voice = client.get_channel(channel_id_voice)
+		for x in voice.members:
+			str += f"{x.name} is ready!\n"
+		await general.send(str)
 
 
 # Determine if its one of the squad
@@ -111,5 +118,9 @@ async def on_message(msg):
 
     if msg.content.startswith('!wally'):
         await msg.channel.send('Is a bitch')
+		
+    if msg.content.startswith('!warn'):
+      await msg.channel.send(f'{name} has initiated a 5 minute warning before starting a game!')
+
 
 client.run(my_secret)
