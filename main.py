@@ -3,10 +3,10 @@ import discord
 from discord.ext import tasks
 import datetime
 import pytz
-import keep_alive
+# import keep_alive
 
 # global cruft
-my_secret = my_secret = os.environ['TOKEN']
+my_secret = my_secret = os.environ.get('TOKEN')
 channel_id_general = 743673283878322230
 client = discord.Client()
 users_time = {}
