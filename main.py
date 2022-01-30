@@ -3,7 +3,6 @@ import discord
 from discord.ext import tasks
 import datetime
 import pytz
-# import keep_alive
 
 # global cruft
 my_secret = my_secret = os.environ.get('TOKEN')
@@ -113,5 +112,4 @@ async def on_message(msg):
     if msg.content.startswith('!wally'):
         await msg.channel.send('Is a bitch')
 
-# keep_alive.keep_alive()
 client.run(my_secret)
