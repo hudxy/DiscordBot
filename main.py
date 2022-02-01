@@ -32,7 +32,7 @@ def IsSpam(author):
 @tasks.loop(minutes=1)
 async def MondayNightCheck():
 	now = AZTimeNow()
-	if now.weekday() == 0 and now.hour == 12 + 8 and now.minute < 2:
+	if now.weekday() == 0 and now.hour == 12 + 8 and now.minute == 30:
 		general = client.get_channel(channel_id_general)
 		str = "@everyone IT'S MONDAY NIGHT!!!\n"
 		voice = client.get_channel(channel_id_voice)
