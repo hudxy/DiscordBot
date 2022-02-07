@@ -91,23 +91,23 @@ async def on_message(msg):
 
     # Author specific messages
     name = msg.author.name
-    if IsWally(name) and not IsSpam(name):
-        await msg.channel.send('Literally no one cares, Wally...')
+    # if IsWally(name) and not IsSpam(name):
+    #     await msg.channel.send('Literally no one cares, Wally...')
 
-    if IsConnor(name) and not IsSpam(name):
-        await msg.channel.send('Connor is ALIVE')
+    # if IsConnor(name) and not IsSpam(name):
+    #     await msg.channel.send('Connor is ALIVE')
 
-    if IsJason(name) and not IsSpam(name):
-    		await msg.channel.send('Jason has the floor!')
+    # if IsJason(name) and not IsSpam(name):
+    # 		await msg.channel.send('Jason has the floor!')
 
-    if IsBrandon(name) and not IsSpam(name):
-    		await msg.channel.send('Brandon needs to get good at Pokemon')
+    # if IsBrandon(name) and not IsSpam(name):
+    # 		await msg.channel.send('Brandon needs to get good at Pokemon')
 
-    if IsLaurence(name) and not IsSpam(name):
-    		await msg.channel.send('Hope your Wok isn\'t ruined!')
+    # if IsLaurence(name) and not IsSpam(name):
+    # 		await msg.channel.send('Hope your Wok isn\'t ruined!')
 
-    if IsHudson(name) and not IsSpam(name):
-		    await msg.channel.send('Never Trust Wally with Betting Advice')
+    # if IsHudson(name) and not IsSpam(name):
+		#     await msg.channel.send('Never Trust Wally with Betting Advice')
 
     # !commands
     if msg.content.startswith('!hello'):
