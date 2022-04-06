@@ -2,6 +2,7 @@ import os
 import requests, json
 import random
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # enter your api key here

@@ -1,8 +1,10 @@
 import os
-import discord
-from discord.ext import tasks
 import datetime
+import discord
 import pytz
+import urllib.parse
+
+from discord.ext import tasks
 from wte import get_place
 
 # global cruft
@@ -13,6 +15,7 @@ intents = discord.Intents().default()
 intents.members = True
 client = discord.Client(intents=intents)
 users_time = {}
+google_search_string = 'https://www.google.com/search?&q='
 
 
 def AZTimeNow():
@@ -126,13 +129,15 @@ async def on_message(msg):
     if msg.content.startswith('!food') or msg.content.startswith('!what to eat') or msg.content.startswith('!wte'):
       x = msg.content.split()
       if len(x) > 1:
-        result = get_place(x[1])
-        if type(result) == type(""):
-            await msg.channel.send(f'Eat at {result}!')
+        zip_code = x[1]
+        place_result = get_place(zip_code)
+        if type(place_result) == type(""):
+            url_encoded_search = urllib.parse.quote_plus(place_result + ' ' + zip_code)
+            await msg.channel.send(f'Eat at {place_result}!\n Google Search: {google_search_string + url_encoded_search}')
         else:
             await msg.channel.send('Something went wrong with the command, blame Laurence...')
       else:
-        await msg.channel.send('Wrong format for command. Format:\n !<food, wte, what to eat> <address/zipcode>')
+        await msg.channel.send('Wrong format for command. Format:\n !<food, wte, what to eat> <zipcode>')
 
     
 
