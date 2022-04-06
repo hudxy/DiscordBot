@@ -3,6 +3,7 @@ import discord
 from discord.ext import tasks
 import datetime
 import pytz
+from wte import get_place
 
 # global cruft
 my_secret = my_secret = os.environ.get('TOKEN')
@@ -121,6 +122,19 @@ async def on_message(msg):
 		
     if msg.content.startswith('!warn'):
       await msg.channel.send(f'{name} has initiated a 5 minute warning before starting a game!')
+    
+    if msg.content.startswith('!food') or msg.content.startswith('!what to eat') or msg.content.startswith('!wte'):
+      x = msg.content.split()
+      if len(x) > 1:
+        result = get_place(x[1])
+        if type(result) == type(""):
+            await msg.channel.send(f'Eat at {result}!')
+        else:
+            await msg.channel.send('Something went wrong with the command, blame Laurence...')
+      else:
+        await msg.channel.send('Wrong format for command. Format:\n !<food, wte, what to eat> <address/zipcode>')
+
+    
 
 
 client.run(my_secret)
