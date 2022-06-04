@@ -127,6 +127,7 @@ async def on_message(msg):
     if msg.content.startswith('!yo'):
         api_key = '4FUDW4xORmITPqmh1FW3lNk9G4dezDfk'
         api_instance = giphy_client.DefaultApi()
+        await msg.chanel.send('testing yo')
         try:
             api_response = api_instance.gifs_search_get(
                 api_key, 'where\'s everyone at', limit=5, rating='g')
