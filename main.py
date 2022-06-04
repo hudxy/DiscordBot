@@ -137,9 +137,13 @@ async def on_message(msg):
     if msg.content.startswith('!yo'):
         api_key = '4FUDW4xORmITPqmh1FW3lNk9G4dezDfk'
         api_instance = giphy_client.DefaultApi()
+        param = msg.content.split()
+        searchQuery = 'where\'s everyone'
+        if len(param) > 1:
+            searchQuery = " ".join(param[1:])
         try:
             api_response = api_instance.gifs_search_get(
-                api_key, 'where\'s everyone', limit=20)
+                api_key, searchQuery, limit=50)
             lst = list(api_response.data)
             gif = random.choice(lst)
 
