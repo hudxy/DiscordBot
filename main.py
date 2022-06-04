@@ -127,14 +127,14 @@ async def on_message(msg):
     if msg.content.startswith('!yo'):
         api_key = '4FUDW4xORmITPqmh1FW3lNk9G4dezDfk'
         api_instance = giphy_client.DefaultApi()
-        await msg.chanel.send('testing yo')
+        await msg.channel.send('testing yo')
         try:
             api_response = api_instance.gifs_search_get(
                 api_key, 'where\'s everyone at', limit=5, rating='g')
             lst = list(api_response.data)
             gif = random.choice(lst)
 
-            await msg.chanel.send(gif.embed.url)
+            await msg.channel.send(gif.embed.url)
 
         except ApiException as e:
             print("exception calling api")
