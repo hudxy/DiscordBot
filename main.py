@@ -55,6 +55,15 @@ async def FridayOrSaturdayNightCheck():
             await general.send(str)
 
 
+@tasks.loop(minutes=1)
+async def FridayVideo():
+    now = AZTimeNow()
+    if now.weekday() == 4:
+        if now.hour == 12 and now.minute == 30:
+            general = client.get_channel(channel_id_general)
+            await general.send("https://www.youtube.com/watch?v=1TewCPi92ro")
+
+
 # Determine if its one of the squad
 def IsHudson(author):
     if author.startswith('hudxy') or author.startswith('QuarterPounder'):
@@ -96,6 +105,7 @@ def IsConnor(author):
 async def on_ready():
     print(f'Logged in as {client.user}\n Time is {AZTimeNow()}')
     FridayOrSaturdayNightCheck.start()
+    FridayVideo.start()
 
 
 @client.event
@@ -127,14 +137,13 @@ async def on_message(msg):
     if msg.content.startswith('!yo'):
         api_key = '4FUDW4xORmITPqmh1FW3lNk9G4dezDfk'
         api_instance = giphy_client.DefaultApi()
-        await msg.channel.send('testing yo')
         try:
             api_response = api_instance.gifs_search_get(
-                api_key, 'where\'s everyone at', limit=5, rating='g')
+                api_key, 'where\'s everyone', limit=20)
             lst = list(api_response.data)
             gif = random.choice(lst)
 
-            await msg.channel.send(gif.embed.url)
+            await msg.channel.send(gif.embed_url)
 
         except ApiException as e:
             print("exception calling api")
