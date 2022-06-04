@@ -34,15 +34,20 @@ def IsSpam(author):
     return retval
 
 @tasks.loop(minutes=1)
-async def MondayNightCheck():
+async def FridayOrSaturdayNightCheck():
 	now = AZTimeNow()
-	if now.weekday() == 0 and now.hour == 12 + 8 and now.minute == 30:
-		general = client.get_channel(channel_id_general)
-		str = "@everyone IT'S MONDAY NIGHT!!!\n"
-		voice = client.get_channel(channel_id_voice)
-		for x in voice.members:
-			str += f"{x.name} is ready!\n"
-		await general.send(str)
+    if now.weekday() == 4 or now.weekday() == 5
+        str = "@everyone IT'S\n"
+	    if now.hour == 12 + 7 and now.minute == 30:
+            general = client.get_channel(channel_id_general)
+            if now.weekday() == 4
+                str = f'{str} Friday NIGHT!!!'
+            if now.weekday() == 5
+                str = f'{str} Saturday NIGHT!!!'
+            voice = client.get_channel(channel_id_voice)
+            for x in voice.members:
+                str += f"{x.name} is ready!\n"
+            await general.send(str)
 
 
 # Determine if its one of the squad
