@@ -1,8 +1,12 @@
 import os
 import datetime
+import random
 import discord
 import pytz
 import urllib.parse
+
+import giphy_client
+from giphy_client.rest import ApiException
 
 from discord.ext import tasks
 from wte import get_place
@@ -33,16 +37,17 @@ def IsSpam(author):
     users_time[author] = now
     return retval
 
+
 @tasks.loop(minutes=1)
 async def FridayOrSaturdayNightCheck():
-	now = AZTimeNow()
-    if now.weekday() == 4 or now.weekday() == 5
+    now = AZTimeNow()
+    if now.weekday() == 4 or now.weekday() == 5:
         str = "@everyone IT'S\n"
-	    if now.hour == 12 + 7 and now.minute == 30:
+        if now.hour == 12 + 7 and now.minute == 30:
             general = client.get_channel(channel_id_general)
-            if now.weekday() == 4
+            if now.weekday() == 4:
                 str = f'{str} Friday NIGHT!!!'
-            if now.weekday() == 5
+            if now.weekday() == 5:
                 str = f'{str} Saturday NIGHT!!!'
             voice = client.get_channel(channel_id_voice)
             for x in voice.members:
@@ -90,7 +95,7 @@ def IsConnor(author):
 @client.event
 async def on_ready():
     print(f'Logged in as {client.user}\n Time is {AZTimeNow()}')
-    MondayNightCheck.start()
+    FridayOrSaturdayNightCheck.start()
 
 
 @client.event
@@ -116,9 +121,23 @@ async def on_message(msg):
     # 		await msg.channel.send('Hope your Wok isn\'t ruined!')
 
     # if IsHudson(name) and not IsSpam(name):
-		#     await msg.channel.send('Never Trust Wally with Betting Advice')
+    #     await msg.channel.send('Never Trust Wally with Betting Advice')
 
     # !commands
+    if msg.content.startswith('!yo'):
+        api_key = '4FUDW4xORmITPqmh1FW3lNk9G4dezDfk'
+        api_instance = giphy_client.DefaultApi()
+        try:
+            api_response = api_instance.gifs_search_get(
+                api_key, 'where\'s everyone at', limit=5, rating='g')
+            lst = list(api_response.data)
+            gif = random.choice(lst)
+
+            await msg.chanel.send(gif.embed.url)
+
+        except ApiException as e:
+            print("exception calling api")
+
     if msg.content.startswith('!hello'):
         await msg.channel.send('Don\'t talk back to me...')
 
@@ -127,24 +146,23 @@ async def on_message(msg):
 
     if msg.content.startswith('!wally'):
         await msg.channel.send('Is a bitch')
-		
-    if msg.content.startswith('!warn'):
-      await msg.channel.send(f'{name} has initiated a 5 minute warning before starting a game!')
-    
-    if msg.content.startswith('!food') or msg.content.startswith('!what to eat') or msg.content.startswith('!wte'):
-      x = msg.content.split()
-      if len(x) > 1:
-        zip_code = x[1]
-        place_result = get_place(zip_code)
-        if type(place_result) == type(""):
-            url_encoded_search = urllib.parse.quote_plus(place_result + ' ' + zip_code)
-            await msg.channel.send(f'Eat at {place_result}!\n Google Search: {google_search_string + url_encoded_search}')
-        else:
-            await msg.channel.send('Something went wrong with the command, blame Laurence...')
-      else:
-        await msg.channel.send('Wrong format for command. Format:\n !<food, wte, what to eat> <zipcode>')
 
-    
+    if msg.content.startswith('!warn'):
+        await msg.channel.send(f'{name} has initiated a 5 minute warning before starting a game!')
+
+    if msg.content.startswith('!food') or msg.content.startswith('!what to eat') or msg.content.startswith('!wte'):
+        x = msg.content.split()
+        if len(x) > 1:
+            zip_code = x[1]
+            place_result = get_place(zip_code)
+            if type(place_result) == type(""):
+                url_encoded_search = urllib.parse.quote_plus(
+                    place_result + ' ' + zip_code)
+                await msg.channel.send(f'Eat at {place_result}!\n Google Search: {google_search_string + url_encoded_search}')
+            else:
+                await msg.channel.send('Something went wrong with the command, blame Laurence...')
+        else:
+            await msg.channel.send('Wrong format for command. Format:\n !<food, wte, what to eat> <zipcode>')
 
 
 client.run(my_secret)
