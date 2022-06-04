@@ -92,22 +92,6 @@ def IsConnor(author):
     return False
 
 
-@client.command()
-async def gif(ctx, *, q="yo"):
-    api_key = '4FUDW4xORmITPqmh1FW3lNk9G4dezDfk'
-    api_instance = giphy_client.DefaultApi()
-    try:
-        api_response = api_instance.gifs_search_get(
-            api_key, q, limit=5, rating='g')
-        lst = list(api_response.data)
-        gif = random.choice(lst)
-
-        await ctx.channel.send(gif.embed.url)
-
-    except ApiException as e:
-        print("exception calling api")
-
-
 @client.event
 async def on_ready():
     print(f'Logged in as {client.user}\n Time is {AZTimeNow()}')
