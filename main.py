@@ -61,7 +61,7 @@ async def FridayVideo():
     if now.weekday() == 4:
         if now.hour == 12 and now.minute == 30:
             general = client.get_channel(channel_id_general)
-            await general.send("https://www.youtube.com/watch?v=1TewCPi92ro")
+            await general.send("https://www.youtube.com/watch?v=1AnG04qnLqI")
 
 
 # Determine if its one of the squad
