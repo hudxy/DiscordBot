@@ -133,11 +133,12 @@ async def on_message(msg):
     # if IsHudson(name) and not IsSpam(name):
     #     await msg.channel.send('Never Trust Wally with Betting Advice')
 
+    lowercase_msg = msg.content.lower()
     # !commands
-    if msg.content.startswith('!yo'):
+    if lowercase_msg.startswith('!yo'):
         api_key = '4FUDW4xORmITPqmh1FW3lNk9G4dezDfk'
         api_instance = giphy_client.DefaultApi()
-        param = msg.content.split()
+        param = lowercase_msg.split()
         searchQuery = 'where\'s everyone'
         if len(param) > 1:
             searchQuery = " ".join(param[1:])
@@ -152,26 +153,26 @@ async def on_message(msg):
         except ApiException as e:
             print("exception calling api")
     
-    if msg.content.startswith('!byron'):
+    if lowercase_msg.startswith('!byron'):
         await msg.channel.send("https://gfycat.com/lineddefenselessduckbillplatypus")
 
-    if msg.content.startswith('!bingbong'):
+    if lowercase_msg.startswith('!bingbong'):
         await msg.channel.send("https://gfycat.com/vacantgorgeousbaiji")
 
-    if msg.content.startswith('!hello'):
+    if lowercase_msg.startswith('!hello'):
         await msg.channel.send('Don\'t talk back to me...')
 
-    if msg.content.startswith('!heyheyhey'):
+    if lowercase_msg.startswith('!heyheyhey'):
         await msg.channel.send('IT\'S FAT ALBERT!')
 
-    if msg.content.startswith('!wally'):
+    if lowercase_msg.startswith('!wally'):
         await msg.channel.send('Is a bitch')
 
-    if msg.content.startswith('!warn'):
+    if lowercase_msg.startswith('!warn'):
         await msg.channel.send(f'{name} has initiated a 5 minute warning before starting a game!')
 
-    if msg.content.startswith('!food') or msg.content.startswith('!what to eat') or msg.content.startswith('!wte'):
-        x = msg.content.split()
+    if lowercase_msg.startswith('!food') or lowercase_msg.startswith('!what to eat') or lowercase_msg.startswith('!wte'):
+        x = lowercase_msg.split()
         if len(x) > 1:
             zip_code = x[1]
             place_result = get_place(zip_code)
