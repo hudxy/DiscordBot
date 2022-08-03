@@ -151,6 +151,12 @@ async def on_message(msg):
 
         except ApiException as e:
             print("exception calling api")
+    
+    if msg.content.startswith('!byron'):
+        await msg.channel.send("https://gfycat.com/lineddefenselessduckbillplatypus")
+
+    if msg.content.startswith('!bingbong'):
+        await msg.channel.send("https://gfycat.com/vacantgorgeousbaiji")
 
     if msg.content.startswith('!hello'):
         await msg.channel.send('Don\'t talk back to me...')
