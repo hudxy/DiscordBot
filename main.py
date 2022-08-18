@@ -4,15 +4,20 @@ import random
 import discord
 import pytz
 import urllib.parse
-
 import giphy_client
-from giphy_client.rest import ApiException
+import psycopg2
 
+from giphy_client.rest import ApiException
 from discord.ext import tasks
+from dotenv import load_dotenv
 from wte import get_place
 
 # global cruft
-my_secret = my_secret = os.environ.get('TOKEN')
+load_dotenv()
+
+my_secret = os.environ.get('TOKEN')
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
 channel_id_general = 743673283878322230
 channel_id_voice = 743673622664708217
 intents = discord.Intents().default()
@@ -100,6 +105,60 @@ def IsConnor(author):
         return True
     return False
 
+def getMovieList():
+    try:
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        with conn.cursor() as cursor:
+            cursor.execute("""SELECT * FROM movies""")
+            result = cursor.fetchall()
+
+        if result is None:
+            # No movies in db
+            print(f"{AZTimeNow()}: Access Movies Failed! No entries in db.")
+
+            return False
+        movies = []
+        for x in result:
+            # Movies DB: x[0] = (int) id, x[1] = (str) title, x[2] = (timestamp) created_on
+            movies.append(str(x[1]))
+        return movies
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error in transaction, reverting all changes using rollback ", error)
+        conn.rollback()
+ 
+    finally:
+        # closing database connection.
+        if conn:
+            # closing connections
+            cursor.close()
+            conn.close()
+
+def addMovie(title: str):
+    try:
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO movies(title, created_on) 
+                VALUES (%(title)s,  CURRENT_TIMESTAMP)
+                """, {
+                'title': title
+            })
+            result = cursor.rowcount
+        
+        return result == 1 #success if row count from cursor is 1
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error in transaction, reverting all changes using rollback ", error)
+        conn.rollback()
+ 
+    finally:
+        # closing database connection.
+        if conn:
+            conn.commit()
+            # closing connections
+            cursor.close()
+            conn.close()
 
 @client.event
 async def on_ready():
@@ -184,6 +243,33 @@ async def on_message(msg):
                 await msg.channel.send('Something went wrong with the command, blame Laurence...')
         else:
             await msg.channel.send('Wrong format for command. Format:\n !<food, wte, what to eat> <zipcode>')
+    # Watchlist command 
+    if lowercase_msg.startswith('!watch'):
+        command_list = lowercase_msg.split()
+        if len(command_list) < 2:
+            await msg.channel.send('Wrong format for command. Format:\n !watch <list>')
+            return
+
+        second_command = command_list[1]
+
+        if second_command.startswith('list'):
+            movies = getMovieList()
+            string = f""
+            for x in range(len(movies)):
+                string += f"{x+1}. {movies[x]}\n"
+            await msg.channel.send(string)
+            return
+
+        if second_command.startswith('add'):
+            remaing_message = msg.content.split()[2:]
+            title = " ".join(remaing_message)
+            if addMovie(title):
+                await msg.channel.send(f"{title} was added to the watchlist!")
+            else:
+                await msg.channel.send(f"There was a problem with adding to the watchlist...")
+            return
+        
+
 
 
 client.run(my_secret)
